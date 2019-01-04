@@ -51,7 +51,6 @@ def next_board_state(state):                      #calculate the next board
         for x in range(width):
             
             live_neighbors = get_neighbors(state, x, y)
-            print(str(live_neighbors) + ' > (' + str(x) + ',' + str(y) + ')')
             
             #if each element for 0-1 live neighbors kill it
             if live_neighbors == 0 or live_neighbors == 1:
