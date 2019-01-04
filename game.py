@@ -41,7 +41,7 @@ def next_board_state(state):                      #calculate the next board
 
     for y in range(height):
         for x in range(width):
-            live_neighbors = reduce(lambda acc, e: acc + e, get_neighbors(state, x, y))
+            live_neighbors = reduce(lambda acc, e: acc + e, get_neighbors(state, x, y), 0)
 
             #if each element for 0-1 live neighbors kill it
             if live_neighbors == 0 or live_neighbors == 1:
