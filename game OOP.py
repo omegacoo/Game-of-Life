@@ -126,6 +126,7 @@ class Board:
             x += 1
             print('>> ' + str(x))
             if new_state == last_state:
+                input()
                 break
             last_state = copy.deepcopy(new_state)
 
