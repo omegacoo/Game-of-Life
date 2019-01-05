@@ -23,10 +23,13 @@ def random_state(width, height):                   #create a grid of live and de
     return state
 
 def test_neighbors(state, x, y):
-    try:
-        return state[y][x]
-    except:
-        return 0
+    if x == -1 or y == -1:                        #stops program from wrapping
+        return 0                                  #remove if statement to wrap
+    else:
+        try:
+            return state[y][x]
+        except:
+            return 0
 
 def get_neighbors(state, x, y):                   #check number of live neighbors
     live_neighbors = 0
