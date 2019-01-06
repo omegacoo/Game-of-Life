@@ -1,14 +1,15 @@
 import random
-import copy
 import os
 import time
 
 class Game:
     
-    def __init__(self):
-        self.board = Board()
-    
-    
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.board = Board(width, height)
+        self.board = Board.initial_board(self.board)
+        
 class Board:
 
     def __init__(self, width, height):
