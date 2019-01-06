@@ -9,13 +9,28 @@ class Game:
         self.height = height
         self.board = Board(width, height)
         self.board = Board.initial_board(self.board)
+        self.render()
         
+    def render(self):
+        print("__" * self.width + "___")
+        for x in range(self.width):
+            print('| ', end='')
+            for y in range(self.height):
+                if self.board[x][y] == 0:
+                    print('  ', end='')
+                else:
+                    print('# ', end='')  
+            print('|')
+        print("--" * self.height + "---")
+    
+    
 class Board:
 
     def __init__(self, width, height):
         self.width = width
         self.height = height
         self.state = []
+        self.initial_board()
         
     def initial_board(self):
         for x in range(self.width):
@@ -24,22 +39,7 @@ class Board:
                 self.state[x].append(Cell().value)
         return self.state
     
-    def render(self):
-        
-        print("__" * self.width + "___")
-        
-        for x in range(self.width):
-            print('| ', end='')
-            for y in range(self.height):
-                if self.state[x][y] == 0:
-                    print('  ', end='')
-                else:
-                    print('# ', end='')
-                
-            print('|')
-            
-        print("--" * self.height + "---")
-    
+
 class Cell:
     
     def __init__(self):
@@ -57,6 +57,4 @@ class Cell:
     def resurrect(self):
         self.value = 1
 
-board_one = Board(5,5)
-board_one.initial_board()
-board_one.render()
+board_one = Game(5,5)
