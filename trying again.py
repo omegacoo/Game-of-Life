@@ -8,7 +8,10 @@ class Game():
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.run()
+        while True:
+            self.run()
+            self.keep_on()
+            os.system('cls')
 
     def run(self):
         self.board = Board(self.width, self.height).starting_board()
@@ -19,7 +22,6 @@ class Game():
             self.last_board = copy.deepcopy(self.board)
             self.board = self.next_board()
             if self.last_board == self.board:
-                input()
                 break
             else:
                 pass
@@ -28,6 +30,13 @@ class Game():
             self.render()
             self.counter += 1
             print('> ' + str(self.counter))
+
+    def keep_on(self):
+        answer = input('Continue? Y/N | ')
+        if answer == 'N':
+            quit()
+        else:
+            return True
 
     def render(self):
         print("__" * self.width + "___")
@@ -101,4 +110,4 @@ class Cell():
     def __init__(self):
         self.value = random.randint(0,1)
 
-board = Game(10,10)
+board = Game(5,5)
