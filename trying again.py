@@ -21,10 +21,8 @@ class Game():
         while True:
             self.last_board = copy.deepcopy(self.board)
             self.board = self.next_board()
-            if self.last_board == self.board:
+            if self.last_board == self.board or self.last_board == self.next_board():#end on repeated board states
                 break
-            else:
-                pass
             time.sleep(1)
             os.system('cls')
             self.render()
@@ -33,10 +31,8 @@ class Game():
 
     def keep_on(self):
         answer = input('Continue? Y/N | ')
-        if answer == 'N':
+        if answer == 'N' or answer == 'n':
             quit()
-        else:
-            return True
 
     def render(self):
         print("__" * self.width + "___")
@@ -110,4 +106,4 @@ class Cell():
     def __init__(self):
         self.value = random.randint(0,1)
 
-board = Game(5,5)
+Game(5,5)
