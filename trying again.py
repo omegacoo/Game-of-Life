@@ -50,7 +50,7 @@ class Game():
         self.new_state = copy.deepcopy(self.board)
         for x in range(self.width):
             for y in range(self.height):
-                self.live_neighbors = self.get_neighbors(x, y)
+                self.live_neighbors = self.board.get_neighbors(x, y)
 
                 if self.live_neighbors == 0 or self.live_neighbors == 1:
                     self.new_state[x][y] = 0
@@ -62,14 +62,20 @@ class Game():
                     self.new_state[x][y] = 0
         return self.new_state
 
-    def test_neighbors_no_wrap(self, x, y):
-        if x == -1 or x == self.width or y == -1 or y == self.height:
-            return 0
-        else:
-            try:
-                return self.board[x][y]
-            except:
-                return 0
+
+class Board():
+
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.state = []
+        self.starting_board()
+
+    def starting_board(self):
+        for x in range(self.width):
+            self.state.append([Cell().value])
+            for y in range(self.height):
+                self.state[x].append(Cell().value)
 
     def get_neighbors(self, x, y):
         self.live_neighbors = 0
@@ -85,25 +91,30 @@ class Game():
 
         return self.live_neighbors
 
-class Board():
+    def test_neighbors_no_wrap(self, x, y):
+        if x == -1 or x == self.width or y == -1 or y == self.height:
+            return 0
+        else:
+            try:
+                return self.state[x][y].status()
+            except:
+                return 0
 
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.state = []
-        self.starting_board()
-
-    def starting_board(self):
-        for x in range(self.width):
-            self.state.append([Cell().value])
-            for y in range(self.height):
-                self.state[x].append(Cell().value)
-        return self.state
-
+    def get_cell(self, x, y):
+        return self.state[x][y].status()
 
 class Cell():
 
     def __init__(self):
         self.value = random.randint(0,1)
+
+    def kill(self):
+        self.value = 0
+
+    def resurrect(self):
+        self.value = 1
+
+    def status(self):
+        return self.value
 
 Game(5,5)
