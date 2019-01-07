@@ -14,7 +14,7 @@ class Game():
             os.system('cls')
 
     def run(self):
-        self.board = Board(self.width, self.height).starting_board()
+        self.board = Board(self.width, self.height).board
         self.counter = 0
         self.render()
         print('> ' + str(self.counter))
@@ -47,61 +47,63 @@ class Game():
         print("--" * self.width + "---")
 
     def next_board(self):
-        self.new_state = copy.deepcopy(self.board)
+        self.new_board = copy.deepcopy(self.board)
         for x in range(self.width):
             for y in range(self.height):
-                self.live_neighbors = self.board.get_neighbors(x, y)
+                alive = self.live_neighbors(x,y)
 
-                if self.live_neighbors == 0 or self.live_neighbors == 1:
-                    self.new_state[x][y] = 0
+                if alive == 0 or alive == 1:
+                    self.new_board[x][y].kill()
+                if alive == 3 and self.new_board[x][y].is_alive() == False:
+                    self.new_board[x][y].resurrect()
+                if alive > 3:
+                    self.new_board[x][y].kill()
+        return self.new_board
 
-                if self.board[x][y] == 0 and self.live_neighbors == 3:
-                    self.new_state[x][y] = 1
 
-                if self.live_neighbors > 3:
-                    self.new_state[x][y] = 0
-        return self.new_state
-
+    def live_neighbors(self, x, y):
+        list_of_neighbors = self.board.get_neighbors(x,y)
+        alive = 0
+        for i in range(len(list_of_neighbors)):
+            if i == True:
+                alive += 1
+        return alive
 
 class Board():
 
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.state = []
-        self.starting_board()
+        self.board = []
+        self.start_board()
 
-    def starting_board(self):
+    def start_board(self):
         for x in range(self.width):
-            self.state.append([Cell().value])
+            self.board.append([Cell()])
             for y in range(self.height):
-                self.state[x].append(Cell().value)
-
-    def get_neighbors(self, x, y):
-        self.live_neighbors = 0
-
-        self.live_neighbors += self.test_neighbors_no_wrap(x-1, y-1)
-        self.live_neighbors += self.test_neighbors_no_wrap(x, y-1)
-        self.live_neighbors += self.test_neighbors_no_wrap(x+1, y-1)
-        self.live_neighbors += self.test_neighbors_no_wrap(x-1, y)
-        self.live_neighbors += self.test_neighbors_no_wrap(x+1, y)
-        self.live_neighbors += self.test_neighbors_no_wrap(x-1, y+1)
-        self.live_neighbors += self.test_neighbors_no_wrap(x, y+1)
-        self.live_neighbors += self.test_neighbors_no_wrap(x+1, y+1)
-
-        return self.live_neighbors
-
-    def test_neighbors_no_wrap(self, x, y):
-        if x == -1 or x == self.width or y == -1 or y == self.height:
-            return 0
-        else:
-            try:
-                return self.state[x][y].status()
-            except:
-                return 0
+                self.board[x].append(Cell())
+        return self.board
 
     def get_cell(self, x, y):
-        return self.state[x][y].status()
+        try:
+            return self.board[x][y].is_alive()
+        except:
+            pass
+
+    def get_neighbors(self, x, y):
+        neighbors = []
+
+        neighbors.append(self.get_cell(x-1, y-1))
+        neighbors.append(self.get_cell(x, y-1))
+        neighbors.append(self.get_cell(x+1, y-1))
+        neighbors.append(self.get_cell(x-1, y))
+        neighbors.append(self.get_cell(x+1, y))
+        neighbors.append(self.get_cell(x-1, y+1))
+        neighbors.append(self.get_cell(x, y+1))
+        neighbors.append(self.get_cell(x+1, y+1))
+
+        return neighbors
+
 
 class Cell():
 
@@ -114,7 +116,7 @@ class Cell():
     def resurrect(self):
         self.value = 1
 
-    def status(self):
-        return self.value
+    def is_alive(self):
+        return self.value == 1
 
 Game(5,5)
