@@ -43,25 +43,10 @@ class Board():
                 new_list[x][y] = self.state[x][y].is_alive()
         return new_list
     
-    def to_state(self, state_list):
-        new_state = state_list
-        for x in range(len(state_list)):
-            for y in range(len(state_list[x])):
-                if state_list[x][y]:
-                    new_state[x][y] = new_state[x][Cell().live()]
-                else:
-                    new_state[x][y] = new_state[x][Cell().die()]
-        return new_state
-    
     def serialize(self):
         state_list = self.to_list(self.state)
         state_serial = json.dumps(state_list)
         return state_serial
-    
-    def unserialize(self, state_list):
-        state_list = json.loads(state_list)
-        new_state = self.to_state(state_list)
-        return new_state
     
     def get_cell(self, x, y):
         return self.state[x][y]
@@ -136,16 +121,19 @@ class Game():
             self.run(self.width, self.height, self.board_zero.state)
         elif answer == '3':
             f = open('saved_boards.txt','w+')
-            f.write(self.board_zero.serialize())            
+            try:
+                f.write(self.board_zero.serialize())            
+            except:
+                print('No game to save')
+                time.sleep(3)
             f.close()
             os.system('cls')
             self.keep_on()
         elif answer == '4':
-            f = open('saved_boards.txt', 'r')
-            if f.mode == 'r':
-                saved_board = f.read()
-                
-            self.run(saved_board.width, saved_board.height, self.board.state)
+            print('Feature not yet Implimented')
+            time.sleep(3)
+            os.system('cls')
+            self.keep_on()
         elif answer == '5':
             quit()
         
@@ -154,9 +142,8 @@ class Game():
         for cell in self.board.get_neighbors(x, y):
             if cell.is_alive():
                 alive += 1
-        
         return alive
-
+    
     def next_board(self):
         new_board = self.board.clone()
         
