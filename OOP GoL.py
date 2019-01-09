@@ -112,7 +112,7 @@ class Game():
             self.render()
             print('>> ' + str(x))
             x += 1
-#            time.sleep(1)
+            time.sleep(.5)
             last_board = self.board
             self.board = self.next_board()
             next_board = self.next_board()
@@ -131,7 +131,7 @@ class Game():
     5)Quit
 >''')
         if answer == '1':
-            self.run(self.width, self.height)
+            self.run(self.width, self.height, state = [])
         elif answer == '2':
             self.run(self.width, self.height, self.board_zero.state)
         elif answer == '3':
@@ -144,7 +144,7 @@ class Game():
             f = open('saved_boards.txt', 'r')
             if f.mode == 'r':
                 saved_board = f.read()
-            self.board = self.board.unserialize(saved_board)
+                
             self.run(saved_board.width, saved_board.height, self.board.state)
         elif answer == '5':
             quit()
@@ -176,7 +176,7 @@ class Game():
         temp_board = self.board.clone()
         for x in range(self.width):
             for y in range(self.height):
-                if self.board.state[x][y].is_alive() == False:
+                if not self.board.state[x][y].is_alive():
                     temp_board.state[x][y] = ' '
                 else:
                     temp_board.state[x][y] = '#'
