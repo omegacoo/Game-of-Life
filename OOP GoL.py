@@ -2,6 +2,7 @@ import random
 import copy
 import os
 import time
+import json
 
 class Cell():
     
@@ -29,12 +30,39 @@ class Board():
         if self.state == []:
             for x in range(self.width):
                 self.state.append([Cell()])
-                for y in range(self.height):
+                for y in range(self.height-1):
                     self.state[x].append(Cell())
                     
     def __eq__(self, other):
         return self.state == other.state
-
+    
+    def to_list(self, state_list):
+        new_list = state_list
+        for x in range(len(state_list)):
+            for y in range(len(state_list[x])):
+                new_list[x][y] = self.state[x][y].is_alive()
+        return new_list
+    
+    def to_state(self, state_list):
+        new_state = state_list
+        for x in range(len(state_list)):
+            for y in range(len(state_list[x])):
+                if state_list[x][y]:
+                    new_state[x][y] = new_state[x][Cell().live()]
+                else:
+                    new_state[x][y] = new_state[x][Cell().die()]
+        return new_state
+    
+    def serialize(self):
+        state_list = self.to_list(self.state)
+        state_serial = json.dumps(state_list)
+        return state_serial
+    
+    def unserialize(self, state_list):
+        state_list = json.loads(state_list)
+        new_state = self.to_state(state_list)
+        return new_state
+    
     def get_cell(self, x, y):
         return self.state[x][y]
     
@@ -73,17 +101,18 @@ class Game():
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.run()
+        self.keep_on()
     
-    def run(self):
+    def run(self, width, height, state = []):
         x = 0
-        self.board = Board(self.width, self.height)
+        self.board = Board(width, height, state)
+        self.board_zero = self.board.clone()
         while True:
             os.system('cls')
             self.render()
             print('>> ' + str(x))
             x += 1
-            time.sleep(1)
+#            time.sleep(1)
             last_board = self.board
             self.board = self.next_board()
             next_board = self.next_board()
@@ -93,16 +122,37 @@ class Game():
             
         
     def keep_on(self):
-        answer = input('Continue? Y/N | ')
-        if answer == 'N' or answer == 'n':
+        answer = input(
+'''Please select from the following options:
+    1)New Random Board
+    2)Repeat Last Board
+    3)Save Last Board
+    4)Load a Saved Board
+    5)Quit
+>''')
+        if answer == '1':
+            self.run(self.width, self.height)
+        elif answer == '2':
+            self.run(self.width, self.height, self.board_zero.state)
+        elif answer == '3':
+            f = open('saved_boards.txt','w+')
+            f.write(self.board_zero.serialize())            
+            f.close()
+            os.system('cls')
+            self.keep_on()
+        elif answer == '4':
+            f = open('saved_boards.txt', 'r')
+            if f.mode == 'r':
+                saved_board = f.read()
+            self.board = self.board.unserialize(saved_board)
+            self.run(saved_board.width, saved_board.height, self.board.state)
+        elif answer == '5':
             quit()
-        else:
-            self.run()
         
     def live_neighbors(self, x, y):
         alive = 0
         for cell in self.board.get_neighbors(x, y):
-            if cell.is_alive() == True:
+            if cell.is_alive():
                 alive += 1
         
         return alive
