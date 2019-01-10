@@ -141,11 +141,7 @@ class Game():
                 self.keep_on()
         elif answer == '3':
             f = open('saved_boards.txt','w+')
-            try:
-                f.write(self.board_zero.serialize())            
-            except:
-                print('No game to save')
-                time.sleep(3)
+            f.write(self.board_zero.serialize())    
             f.close()
             os.system('cls')
             self.keep_on()
@@ -207,13 +203,3 @@ class Game():
 
 
 Game(5,5)
-
-
-
-
-
-
-
-
-
-
