@@ -43,6 +43,20 @@ class Board():
                 new_list[x][y] = self.state[x][y].is_alive()
         return new_list
     
+    def unserialize(saved_list):
+        saved_list = json.loads(saved_list)
+        return saved_list
+    
+    def to_state(saved_list):
+        new_state = Board.unserialize(saved_list)
+        for x in range(len(new_state)):
+            for y in range(len(new_state[x])):
+                if new_state[x][y]:
+                    new_state[x][y] = Cell().live()
+                else:
+                    new_state[x][y] = Cell().die()
+        return new_state
+    
     def serialize(self):
         state_list = self.to_list(self.state)
         state_serial = json.dumps(state_list)
@@ -130,13 +144,14 @@ class Game():
             os.system('cls')
             self.keep_on()
         elif answer == '4':
-            print('Feature not yet Implimented')
-            time.sleep(3)
-            os.system('cls')
-            self.keep_on()
+            f = open('saved_boards.txt', 'r')
+            if f.mode == 'r':
+                saved_state = f.read()
+            self.board = Board.to_state(saved_state)
+            self.run(len(self.board), len(self.board[0]))
         elif answer == '5':
-            quit()
-        
+            quit()        
+    
     def live_neighbors(self, x, y):
         alive = 0
         for cell in self.board.get_neighbors(x, y):
