@@ -132,7 +132,13 @@ class Game():
         if answer == '1':
             self.run(self.width, self.height, state = [])
         elif answer == '2':
-            self.run(self.width, self.height, self.board_zero.state)
+            try:
+                self.run(self.width, self.height, self.board_zero.state)
+            except:
+                print('No Game to Repeat')
+                time.sleep(3)
+                os.system('cls')
+                self.keep_on()
         elif answer == '3':
             f = open('saved_boards.txt','w+')
             try:
@@ -151,6 +157,11 @@ class Game():
             self.run(len(self.board), len(self.board[0]))
         elif answer == '5':
             quit()        
+        else:
+            print('Not a Valid Selection. Please try again.')
+            time.sleep(3)
+            os.system('cls')
+            self.keep_on()
     
     def live_neighbors(self, x, y):
         alive = 0
