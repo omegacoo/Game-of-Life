@@ -45,6 +45,7 @@ class Board():
     
     def unserialize(saved_list):
         saved_list = json.loads(saved_list)
+        print(saved_list)
         return saved_list
     
     def to_state(saved_list):
@@ -52,10 +53,12 @@ class Board():
         for x in range(len(new_state)):
             for y in range(len(new_state[x])):
                 if new_state[x][y]:
-                    new_state[x][y] = Cell().live()
+                    new_state[x][y] = Cell()
+                    new_state[x][y].live()
                 else:
-                    new_state[x][y] = Cell().die()
-        return new_state
+                    new_state[x][y] = Cell()
+                    new_state[x][y].die()
+        return Board(len(new_state), len(new_state[0]), new_state)
     
     def serialize(self):
         state_list = self.to_list(self.state)
@@ -111,7 +114,7 @@ class Game():
             self.render()
             print('>> ' + str(x))
             x += 1
-            time.sleep(.5)
+            time.sleep(.02)
             last_board = self.board
             self.board = self.next_board()
             next_board = self.next_board()
@@ -140,18 +143,28 @@ class Game():
                 os.system('cls')
                 self.keep_on()
         elif answer == '3':
-            f = open('saved_boards.txt','w+')
-            f.write(self.board_zero.serialize())    
-            f.close()
-            os.system('cls')
-            self.keep_on()
+            try:
+                f = open('saved_boards.txt','w+')
+                f.write(self.board_zero.serialize())    
+                f.close()
+                os.system('cls')
+                self.keep_on()
+            except:
+                print('No Game to Save')
+                time.sleep(3)
+                os.system('cls')
+                self.keep_on()
         elif answer == '4':
             f = open('saved_boards.txt', 'r')
             if f.mode == 'r':
                 saved_state = f.read()
             self.board = Board.to_state(saved_state)
-            self.run(len(self.board), len(self.board[0]))
+            self.run(len(self.board.state), len(self.board.state[0]), self.board.state)
         elif answer == '5':
+            try:
+                f.close()
+            except:
+                pass
             quit()        
         else:
             print('Not a Valid Selection. Please try again.')
@@ -190,7 +203,7 @@ class Game():
                 else:
                     temp_board.state[x][y] = '#'
         
-        print("__" * self.width + "___")
+        print("__" * self.height + "___")
         
         for x in range(self.width):
             print('| ', end='')
@@ -199,7 +212,7 @@ class Game():
             print('|')
             
         
-        print("--" * self.width + "---")
+        print("--" * self.height + "---")
 
 
-Game(5,5)
+Game(10,10)
