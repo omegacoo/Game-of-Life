@@ -45,7 +45,6 @@ class Board():
     
     def unserialize(saved_list):
         saved_list = json.loads(saved_list)
-        print(saved_list)
         return saved_list
     
     def to_state(saved_list):
@@ -161,10 +160,6 @@ class Game():
             self.board = Board.to_state(saved_state)
             self.run(len(self.board.state), len(self.board.state[0]), self.board.state)
         elif answer == '5':
-            try:
-                f.close()
-            except:
-                pass
             quit()        
         else:
             print('Not a Valid Selection. Please try again.')
