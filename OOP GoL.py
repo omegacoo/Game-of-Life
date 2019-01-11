@@ -159,11 +159,17 @@ class Game():
                 os.system('cls')
                 self.keep_on()
         elif answer == '4':
-            f = open('saved_boards.txt', 'r')
-            if f.mode == 'r':
-                saved_state = f.read()
-            self.board = Board.to_state(saved_state)
-            self.run(len(self.board.state), len(self.board.state[0]), self.board.state)
+            try:
+                f = open('saved_boards.txt', 'r')
+                if f.mode == 'r':
+                    saved_state = f.read()
+                self.board = Board.to_state(saved_state)
+                self.run(len(self.board.state), len(self.board.state[0]), self.board.state)
+            except FileNotFoundError:
+                print('No File Found')
+                time.sleep(3)
+                os.system('cls')
+                self.keep_on()
         elif answer == '5':
             quit()        
         else:
