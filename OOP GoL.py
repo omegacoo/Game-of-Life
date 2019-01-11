@@ -136,7 +136,7 @@ class Game():
         elif answer == '2':
             try:
                 self.run(self.width, self.height, self.board_zero.state)
-            except:
+            except AttributeError:
                 print('No Game to Repeat')
                 time.sleep(3)
                 os.system('cls')
@@ -148,7 +148,12 @@ class Game():
                 f.close()
                 os.system('cls')
                 self.keep_on()
-            except:
+            except FileNotFoundError:
+                print('No File Found')
+                time.sleep(3)
+                os.system('cls')
+                self.keep_on()
+            except AttributeError:
                 print('No Game to Save')
                 time.sleep(3)
                 os.system('cls')
