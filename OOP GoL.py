@@ -43,11 +43,11 @@ class Board():
                 new_list[x][y] = self.state[x][y].is_alive()
         return new_list
     
-    def unserialize(self, saved_list):
+    def unserialize(saved_list):
         saved_list = json.loads(saved_list)
         return saved_list
     
-    def to_state(self, saved_list):
+    def to_state(saved_list):
         new_state = Board.unserialize(saved_list)
         for x in range(len(new_state)):
             for y in range(len(new_state[x])):
