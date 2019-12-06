@@ -43,11 +43,11 @@ class Board():
                 new_list[x][y] = self.state[x][y].is_alive()
         return new_list
     
-    def unserialize(saved_list):
+    def unserialize(self, saved_list):
         saved_list = json.loads(saved_list)
         return saved_list
     
-    def to_state(saved_list):
+    def to_state(self, saved_list):
         new_state = Board.unserialize(saved_list)
         for x in range(len(new_state)):
             for y in range(len(new_state[x])):
@@ -113,7 +113,7 @@ class Game():
             self.render()
             print('>> ' + str(x))
             x += 1
-            time.sleep(.02)
+            time.sleep(.2)
             last_board = self.board
             self.board = self.next_board()
             next_board = self.next_board()
@@ -220,5 +220,5 @@ class Game():
         
         print("--" * self.height + "---")
 
-
-Game(10,10)
+if __name__ == "__main__":
+    Game(10,10)
