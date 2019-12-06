@@ -8,3 +8,8 @@ Learning OOP in an interesting way
 
 ![Build Status](https://travis-ci.org/thinkful-c11/book-thing.io.svg?branch=master)
 
+## Screen Shots
+
+The Screen:
+
+![screen](screenshots/GoL.png)
