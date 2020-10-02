@@ -24,7 +24,7 @@ The Screen:
 ## Features:
 
 * Save the life cycle you just played
-* Replay the a saved life cycle
+* Replay the saved life cycle
 
 ## Author:
 
