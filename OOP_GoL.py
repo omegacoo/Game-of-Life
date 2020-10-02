@@ -3,6 +3,7 @@ import copy
 import os
 import time
 import json
+import platform
 
 class Cell():
     
@@ -30,7 +31,7 @@ class Board():
         if self.state == []:
             for x in range(self.width):
                 self.state.append([Cell()])
-                for y in range(self.height-1):
+                for _y in range(self.height-1):
                     self.state[x].append(Cell())
                     
     def __eq__(self, other):
@@ -102,14 +103,20 @@ class Game():
     def __init__(self, width, height):
         self.width = width
         self.height = height
+        self.clearScreen()
         self.keep_on()
+    
+    def clearScreen(self):
+        if platform.system() == 'Linux':
+            return os.system('clear')
+        return os.system('cls')
     
     def run(self, width, height, state = []):
         x = 0
         self.board = Board(width, height, state)
         self.board_zero = self.board.clone()
         while True:
-            os.system('cls')
+            self.clearScreen()
             self.render()
             print('>> ' + str(x))
             x += 1
@@ -139,24 +146,24 @@ class Game():
             except AttributeError:
                 print('No Game to Repeat')
                 time.sleep(3)
-                os.system('cls')
+                self.clearScreen()
                 self.keep_on()
         elif answer == '3':
             try:
                 f = open('saved_boards.txt','w+')
                 f.write(self.board_zero.serialize())    
                 f.close()
-                os.system('cls')
+                self.clearScreen()
                 self.keep_on()
             except FileNotFoundError:
                 print('No File Found')
                 time.sleep(3)
-                os.system('cls')
+                self.clearScreen()
                 self.keep_on()
             except AttributeError:
                 print('No Game to Save')
                 time.sleep(3)
-                os.system('cls')
+                self.clearScreen()
                 self.keep_on()
         elif answer == '4':
             try:
@@ -168,14 +175,14 @@ class Game():
             except FileNotFoundError:
                 print('No File Found')
                 time.sleep(3)
-                os.system('cls')
+                self.clearScreen()
                 self.keep_on()
         elif answer == '5':
             quit()        
         else:
             print('Not a Valid Selection. Please try again.')
             time.sleep(3)
-            os.system('cls')
+            self.clearScreen()
             self.keep_on()
     
     def live_neighbors(self, x, y):
